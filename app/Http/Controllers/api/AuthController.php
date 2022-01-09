@@ -46,7 +46,7 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $user = User::findOrFail($request->input('email'));
+        $user = User::whereEmail($request->input('email'))->first();
         if (!Hash::check($request->input('password'),$user->password))
         {
             return response()->json([
@@ -62,7 +62,7 @@ class AuthController extends Controller
         $token = $user->createToken('local')->accessToken;
         return response()->json([
             'success' => true,
-            'message' => 'You registered successfully!',
+            'message' => 'You\'ve logged in successfully!',
             'data' => ['token' => $token]
         ]);
     }
